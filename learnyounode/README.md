@@ -2,14 +2,10 @@
 
 https://github.com/workshopper/learnyounode
 
-13 total excercises
-
-## Excercises
-
-13 total excercises. Here's the details of #3-#13 (1 and 2 were straightforward):
+13 total excercises. Here's the details of each excercise that I've completed (1 and 2 were straightforward, so I've left them out):
 
 
-### MY FIRST I/O!
+## MY FIRST I/O!
 
 Exercise 3 of 13
 
@@ -23,24 +19,20 @@ The full path to the file to read will be provided as the first command-line arg
 
 To perform a filesystem operation you are going to need the fs module from the Node core library. To load this kind of module, or any other "global" module, use the following incantation:
 
-    var fs = require('fs')
+```js
+var fs = require('fs')
+```
 
 Now you have the full fs module available in a variable named fs.
 
 All synchronous (or blocking) filesystem methods in the fs module end with 'Sync'. To read a file, you'll need to use fs.readFileSync('/path/to/file'). This method will return a Buffer object containing the complete contents of the file.
 
-Documentation on the fs module can be found by pointing your browser here:
-  file:///Users/codonnell/.ndenv/versions/v0.12.0/lib/node_modules/learnyounode/node_apidoc/fs.html
-
 Buffer objects are Node's way of efficiently representing arbitrary arrays of data, whether it be ascii, binary or some other format. Buffer objects can be converted to strings by simply calling the toString() method on them. e.g. var str = buf.toString().
-
-Documentation on Buffers can be found by pointing your browser here:
-  file:///Users/codonnell/.ndenv/versions/v0.12.0/lib/node_modules/learnyounode/node_apidoc/buffer.html
 
 If you're looking for an easy way to count the number of newlines in a string, recall that a JavaScript String can be .split() into an array of substrings and that '\n' can be used as a delimiter. Note that the test file does not have a newline character ('\n') at the end of the last line, so using this method you'll end up with an array that has one more element than the number of newlines.
 
 
-### MY FIRST ASYNC I/O!
+## MY FIRST ASYNC I/O!
 
 Exercise 4 of 13
 
@@ -58,16 +50,15 @@ Instead of fs.readFileSync() you will want to use fs.readFile() and instead of u
 
 Remember that idiomatic Node.js callbacks normally have the signature:
 
-    function callback (err, data) { /* ... */ }
+```js
+function callback (err, data) { /* ... */ }
+```
 
 so you can check if an error occurred by checking whether the first argument is truthy. If there is no error, you should have your Buffer object as the second argument. As with readFileSync(), you can supply 'utf8' as the second argument and put the callback as the third argument and you will get a String instead of a Buffer.
 
-Documentation on the fs module can be found by pointing your browser here:
-  file:///Users/codonnell/.ndenv/versions/v0.12.0/lib/node_modules/learnyounode/node_apidoc/fs.html
-
 -------------------------------------------------------------------------------
 
-### FILTERED LS
+## FILTERED LS
 
 Exercise 5 of 13
 
@@ -83,39 +74,36 @@ The list of files should be printed to the console, one file per line. You must 
 
 The fs.readdir() method takes a pathname as its first argument and a callback as its second. The callback signature is:
 
-    function callback (err, list) { /* ... */ }
+```js
+function callback (err, list) { /* ... */ }
+```
 
 where list is an array of filename strings.
 
-Documentation on the fs module can be found by pointing your browser here:
-  file:///Users/codonnell/.ndenv/versions/v0.12.0/lib/node_modules/learnyounode/node_apidoc/fs.html
-
 You may also find node's path module helpful, particularly the extname method.
-
-Documentation on the path module can be found by pointing your browser here:
-  file:///Users/codonnell/.ndenv/versions/v0.12.0/lib/node_modules/learnyounode/node_apidoc/path.html
 
 -------------------------------------------------------------------------------
 
-Your solution to FILTERED LS passed!
-
 Here's the official solution in case you want to compare notes:
 
-──────────────────────────────────────────────────────────────────────────────
-    var fs = require('fs')
-    var path = require('path')
+-------------------------------------------------------------------------------
 
-    fs.readdir(process.argv[2], function (err, list) {
-      list.forEach(function (file) {
-        if (path.extname(file) === '.' + process.argv[3])
-          console.log(file)
-      })
-    })
+```js
+var fs = require('fs')
+var path = require('path')
 
-──────────────────────────────────────────────────────────────────────────────
+fs.readdir(process.argv[2], function (err, list) {
+  list.forEach(function (file) {
+    if (path.extname(file) === '.' + process.argv[3])
+      console.log(file)
+  })
+})
+```
+
+-------------------------------------------------------------------------------
 
 
-### MAKE IT MODULAR
+## MAKE IT MODULAR
 
 Exercise 6 of 13
 
@@ -146,13 +134,17 @@ The benefit of having a contract is that your module can be used by anyone who e
 
 Create a new module by creating a new file that just contains your directory reading and filtering function. To define a single function export, you assign your function to the module.exports object, overwriting what is already there:
 
-    module.exports = function (args) { /* ... */ }
+```js
+module.exports = function (args) { /* ... */ }
+```
 
 Or you can use a named function and assign the name.
 
 To use your new module in your original program file, use the require() call in the same way that you require('fs') to load the fs module. The only difference is that for local modules must be prefixed with './'. So, if your file is named mymodule.js then:
 
-    var mymodule = require('./mymodule.js')
+```js
+var mymodule = require('./mymodule.js')
+```
 
 The '.js' is optional here and you will often see it omitted.
 
@@ -160,18 +152,20 @@ You now have the module.exports object in your module assigned to the mymodule v
 
 Also keep in mind that it is idiomatic to check for errors and do early-returns within callback functions:
 
-    function bar (callback) {
-      foo(function (err, data) {
-        if (err)
-          return callback(err) // early return
+```js
+function bar (callback) {
+  foo(function (err, data) {
+    if (err)
+      return callback(err) // early return
 
-        // ... no error, continue doing cool things with `data`
+    // ... no error, continue doing cool things with `data`
 
-        // all went well, call callback with `null` for the error argument
+    // all went well, call callback with `null` for the error argument
 
-        callback(null, data)
-      })
-    }
+    callback(null, data)
+  })
+}
+```
 
 -------------------------------------------------------------------------------
 
@@ -179,46 +173,47 @@ Your solution to MAKE IT MODULAR passed!
 
 Here's the official solution in case you want to compare notes:
 
-──────────────────────────────────────────────────────────────────────────────
+-------------------------------------------------------------------------------
 solution.js:
 
-    var filterFn = require('./solution_filter.js')
-    var dir = process.argv[2]
-    var filterStr = process.argv[3]
+```js
+var filterFn = require('./solution_filter.js')
+var dir = process.argv[2]
+var filterStr = process.argv[3]
 
-    filterFn(dir, filterStr, function (err, list) {
-      if (err)
-        return console.error('There was an error:', err)
+filterFn(dir, filterStr, function (err, list) {
+  if (err)
+    return console.error('There was an error:', err)
 
-      list.forEach(function (file) {
-        console.log(file)
-      })
-    })
-
-──────────────────────────────────────────────────────────────────────────────
+  list.forEach(function (file) {
+    console.log(file)
+  })
+})
+```
+-------------------------------------------------------------------------------
 solution_filter.js:
 
-    var fs = require('fs')
-    var path = require('path')
+```js
+var fs = require('fs')
+var path = require('path')
 
-    module.exports = function (dir, filterStr, callback) {
+module.exports = function (dir, filterStr, callback) {
+  fs.readdir(dir, function (err, list) {
+    if (err)
+      return callback(err)
 
-      fs.readdir(dir, function (err, list) {
-        if (err)
-          return callback(err)
+    list = list.filter(function (file) {
+      return path.extname(file) === '.' + filterStr
+    })
 
-        list = list.filter(function (file) {
-          return path.extname(file) === '.' + filterStr
-        })
-
-        callback(null, list)
-      })
-    }
-
-──────────────────────────────────────────────────────────────────────────────
+    callback(null, list)
+  })
+}
+```
+-------------------------------------------------------------------------------
 
 
-### HTTP CLIENT
+## HTTP CLIENT
 
 Exercise 7 of 13
 
@@ -230,18 +225,19 @@ Write a program that performs an HTTP GET request to a URL provided to you as th
 
 For this exercise you will need to use the http core module.
 
-Documentation on the http module can be found by pointing your browser here:
-  file:///Users/codonnell/.ndenv/versions/v0.12.0/lib/node_modules/learnyounode/node_apidoc/http.html
-
 The http.get() method is a shortcut for simple GET requests, use it to simplify your solution. The first argument to http.get() can be the URL you want to GET; provide a callback as the second argument.
 
 Unlike other callback functions, this one has the signature:
 
-    function callback (response) { /* ... */ }
+```js
+function callback (response) { /* ... */ }
+```
 
 Where the response object is a Node Stream object. You can treat Node Streams as objects that emit events. The three events that are of most interest are: "data", "error" and "end". You listen to an event like so:
 
-    response.on("data", function (data) { /* ... */ })
+```js
+response.on("data", function (data) { /* ... */ })
+```
 
 The "data" event is emitted when a chunk of data is available and can be processed. The size of the chunk depends upon the underlying data source.
 
@@ -249,22 +245,21 @@ The response object / Stream that you get from http.get() also has a setEncoding
 
 -------------------------------------------------------------------------------
 
-──────────────────────────────────────────────────────────────────────────────
-
 Your solution to HTTP CLIENT passed!
 
 Here's the official solution in case you want to compare notes:
 
-────────────────────────────────────────────────────────────────────────────────
-    var http = require('http')
+-------------------------------------------------------------------------------
+```js
+var http = require('http')
 
-    http.get(process.argv[2], function (response) {
-      response.setEncoding('utf8')
-      response.on('data', console.log)
-      response.on('error', console.error)
-    })
+http.get(process.argv[2], function (response) {
+  response.setEncoding('utf8')
+  response.on('data', console.log)
+  response.on('error', console.error)
+})
+```
+-------------------------------------------------------------------------------
 
-──────────────────────────────────────────────────────────────────────────────
 
-
-### 
+## 
